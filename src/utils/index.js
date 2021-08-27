@@ -8,6 +8,9 @@ const isPlainString = (value) => toString(value) === '[object String]';
 
 const isPlainNumber = (value) => toString(value) === '[object Number]';
 
+export const isPlainFunction = (value) =>
+	toString(value) === '[object Function]';
+
 export const wrapTextNode = (value) => {
 	if (isPlainString(value) || isPlainNumber(value)) {
 		return {

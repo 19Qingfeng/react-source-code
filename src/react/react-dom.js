@@ -1,3 +1,4 @@
+import { isPlainFunction } from '../utils';
 import { REACT_TEXT } from '../utils/constant';
 
 function render(vDom, el) {
@@ -11,6 +12,8 @@ function createDom(vDom) {
 	let dom;
 	if (type == REACT_TEXT) {
 		dom = document.createTextNode(props.content);
+	} else if (isPlainFunction(type)) {
+		return mountFunctionComponent(vDom);
 	} else {
 		dom = document.createElement(type);
 	}
@@ -35,6 +38,13 @@ function reconcileChildren(vDoms, el) {
 	vDoms.forEach((vDom) => {
 		render(vDom, el);
 	});
+}
+
+// 挂载FunctionComponent
+function mountFunctionComponent(vDom) {
+	const { type, props } = vDom;
+	const dom = createDom(type(props));
+	return dom;
 }
 
 // 更新props

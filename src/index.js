@@ -1,9 +1,14 @@
 import React from './react/react';
+import ReactDOM from './react/react-dom';
 
-function Component(props) {
-	return <div id="6">waghaoyu</div>;
-}
+const element = (
+	<div id="hello" style={{ color: 'red', backgroundColor: 'blue' }}>
+		<p>hello</p>
+		<p>!</p>
+		<p>world!</p>
+	</div>
+);
 
-const element = <Component name="hello">123</Component>;
+console.log(element, 'element');
 
-console.log(element);
+ReactDOM.render(element, document.getElementById('root'));

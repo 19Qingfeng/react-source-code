@@ -22,3 +22,7 @@ export const wrapTextNode = (value) => {
 	}
 	return value;
 };
+
+export const isClassComponent = (childrenClass) => {
+	return !!childrenClass.prototype.isReactComponent;
+};

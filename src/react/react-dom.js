@@ -1,4 +1,4 @@
-import { isPlainFunction } from '../utils';
+import { isPlainFunction, isClassComponent } from '../utils';
 import { REACT_TEXT } from '../utils/constant';
 
 function render(vDom, el) {
@@ -13,7 +13,11 @@ function createDom(vDom) {
 	if (type == REACT_TEXT) {
 		dom = document.createTextNode(props.content);
 	} else if (isPlainFunction(type)) {
-		return mountFunctionComponent(vDom);
+		if (isClassComponent(type)) {
+			return mountClassComponent(vDom);
+		} else {
+			return mountFunctionComponent(vDom);
+		}
 	} else {
 		dom = document.createElement(type);
 	}
@@ -38,6 +42,13 @@ function reconcileChildren(vDoms, el) {
 	vDoms.forEach((vDom) => {
 		render(vDom, el);
 	});
+}
+
+// 挂载ClassComponent
+function mountClassComponent(vDom) {
+	const { type, props } = vDom;
+	const dom = createDom(new type(props).render());
+	return dom;
 }
 
 // 挂载FunctionComponent

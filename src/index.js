@@ -11,17 +11,30 @@ import ReactDOM from './react/react-dom';
 // );
 
 // function component 渲染
-function FunctionComponent(props) {
-	return (
-		<div id="wang.haoyu">
-			<p>hello.My name is wang.haoyu</p>
-			<p>{props.children}</p>
-		</div>
-	);
+// function FunctionComponent(props) {
+// 	return (
+// 		<div id="wang.haoyu">
+// 			<p>hello.My name is wang.haoyu</p>
+// 			<p>{props.children}</p>
+// 		</div>
+// 	);
+// }
+
+// const element = <FunctionComponent>React Study</FunctionComponent>;
+
+// console.log(element, 'element');
+
+// class Component地址
+class ClassComponent extends React.Component {
+	constructor() {
+		super();
+	}
+
+	render() {
+		return <div>hello</div>;
+	}
 }
 
-const element = <FunctionComponent>React Study</FunctionComponent>;
-
-console.log(element, 'element');
+const element = <ClassComponent></ClassComponent>;
 
 ReactDOM.render(element, document.getElementById('root'));

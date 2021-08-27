@@ -1,4 +1,5 @@
 import { wrapTextNode } from '../utils/index';
+import Component from './component';
 
 const React = {
 	// 通过createElement将jsx转化成为vdom
@@ -18,6 +19,8 @@ const React = {
 			props,
 		};
 	},
+	// 类组件
+	Component,
 };
 
 export default React;

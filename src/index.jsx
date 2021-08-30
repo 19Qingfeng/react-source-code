@@ -28,10 +28,30 @@ import ReactDOM from './react/react-dom';
 class ClassComponent extends React.Component {
 	constructor() {
 		super();
+		this.state = {
+			number: 1,
+		};
 	}
 
+	handleClick = () => {
+		console.log('Trigger Click');
+		this.setState({ number: 2 }, () => {
+			console.log('done1');
+		});
+		this.setState(
+			(pre) => {
+				console.log('上一次的state', pre);
+				return { number: '10' };
+			},
+			() => {
+				console.log('done2');
+			}
+		);
+	};
+
 	render() {
-		return <div>hello</div>;
+		console.log(this.state.number, 'render');
+		return <div onClick={this.handleClick}>{this.state.number}</div>;
 	}
 }
 

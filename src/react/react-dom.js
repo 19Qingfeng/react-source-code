@@ -64,14 +64,24 @@ function updateProps(dom, oldProps, newProps) {
 		if (key === 'children' || key === 'content') {
 			return;
 		}
+		// 处理事件
 		if (key === 'style') {
 			addStyleToElement(dom, newProps[key]);
+		} else if (key.startsWith('on')) {
+			addEventToElement(dom, key, newProps[key]);
 		} else {
 			dom[key] = newProps[key];
 		}
 	});
 }
 
+// 事件绑定
+function addEventToElement(dom, eventName, eventHandler) {
+	const lowerEventName = eventName.toLowerCase();
+	dom[lowerEventName] = eventHandler;
+}
+
+// 样式处理
 function addStyleToElement(dom, styleObject) {
 	Object.keys(styleObject).forEach((key) => {
 		const value = styleObject[key];

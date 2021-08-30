@@ -2,7 +2,7 @@
   "name": "react-source",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.jsx",
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
     "start": "webpack server",

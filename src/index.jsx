@@ -34,23 +34,22 @@ class ClassComponent extends React.Component {
 	}
 
 	handleClick = () => {
-		console.log('Trigger Click');
-		this.setState({ number: 2 }, () => {
+		this.setState({ number: this.state.number + 1 }, () => {
 			console.log('done1');
 		});
-		this.setState(
-			(pre) => {
-				console.log('上一次的state', pre);
-				return { number: '10' };
-			},
-			() => {
-				console.log('done2');
-			}
-		);
+		// this.setState(
+		// 	(pre) => {
+		// 		console.log('上一次的state', pre);
+		// 		return { number: '10' };
+		// 	},
+		// 	() => {
+		// 		console.log('done2');
+		// 	}
+		// );
 	};
 
 	render() {
-		console.log(this.state.number, 'render');
+		// console.log(this.state.number, 'render');
 		return <div onClick={this.handleClick}>{this.state.number}</div>;
 	}
 }

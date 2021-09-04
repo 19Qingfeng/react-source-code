@@ -1,6 +1,6 @@
 import { isPlainFunction, isClassComponent } from '../utils';
 import { REACT_TEXT } from '../utils/constant';
-
+import { addEvents } from './events';
 function render(vDom, el) {
 	const dom = createDom(vDom);
 	el.appendChild(dom);
@@ -76,7 +76,8 @@ function updateProps(dom, oldProps, newProps) {
 		if (key === 'style') {
 			addStyleToElement(dom, newProps[key]);
 		} else if (key.startsWith('on')) {
-			addEventToElement(dom, key, newProps[key]);
+			addEvents(dom, key.toLocaleLowerCase(), newProps[key]);
+			// addEventToElement(dom, key.toLocaleLowerCase(), newProps[key]);
 		} else {
 			dom[key] = newProps[key];
 		}

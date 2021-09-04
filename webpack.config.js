@@ -9,6 +9,7 @@ module.exports = {
 	module: {
 		rules: [{ test: /\.(j|t)sx?$/i, use: 'babel-loader' }],
 	},
+	devtool: 'eval-source-map',
 	devServer: {
 		// 公共资源路径
 		static: {

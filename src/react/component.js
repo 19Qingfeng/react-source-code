@@ -1,6 +1,28 @@
 import { isPlainFunction } from '../utils';
 import { compareToVDom, findDOM } from './react-dom';
 
+/**
+ * 实现思路
+ * React在事件处理函数中默认会将isBatchUpdating改成true 表示批量更新
+ * 之后如果是批量更新 我们对于state的修改就应该缓存起来 将updater实例缓存在updaters
+ * 当事件处理函数结束之后 同步执行batchUpdate函数 batchUpdate方法执行批量更新
+ * 然后再将isBatchUpdating重置为false
+ */
+
+// 控制批量更新
+export const updateQueue = {
+	isBatchUpdating: false,
+	updaters: new Set(),
+	// 批量更新方法
+	batchUpdate() {
+		for (let updater of updateQueue.updaters) {
+			updater.updateComponent();
+		}
+		updateQueue.isBatchUpdating = false;
+		updateQueue.updaters.clear();
+	},
+};
+
 // 专门管理更新调度逻辑
 class Updater {
 	constructor(classInstance) {
@@ -22,8 +44,13 @@ class Updater {
 
 	// props/state变化触发更新
 	emitUpdate() {
-		// 这里后来会添加批量更新的判断 判断是否是批量更新
-		this.updateComponent();
+		if (updateQueue.isBatchUpdating) {
+			// 批量更新
+			updateQueue.updaters.add(this);
+		} else {
+			// 非批量更新
+			this.updateComponent();
+		}
 	}
 
 	// 让组件更新
@@ -101,7 +128,6 @@ class Component {
 		const oldRenderVDom = this.oldRenderVDom;
 		const newRenderVDom = this.render();
 		// 真实挂载DOM节点
-		// const oldDomParent = findDOM(oldRenderVDom).parentNode;
 		const parentDom = findDOM(oldRenderVDom).parentNode;
 		// diff算法 比较差异 将差别更新到真实DOM上
 		compareToVDom(parentDom, oldRenderVDom, newRenderVDom);

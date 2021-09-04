@@ -29,28 +29,46 @@ class ClassComponent extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			number: 1,
+			number: 0,
 		};
 	}
 
 	handleClick = () => {
-		this.setState({ number: this.state.number + 1 }, () => {
-			console.log('done1');
+		this.setState({ number: this.state.number + 1 });
+		console.log(this.state.number);
+		this.setState({ number: this.state.number + 1 });
+		console.log(this.state.number);
+		setTimeout(() => {
+			console.log('开启定时器');
+			this.setState({ number: this.state.number + 1 });
+			console.log(this.state.number, 'number');
+			this.setState({ number: this.state.number + 1 });
+			console.log(this.state.number, 'number');
+			this.setState({ number: this.state.number + 1 });
+			console.log(this.state.number, 'number');
 		});
-		// this.setState(
-		// 	(pre) => {
-		// 		console.log('上一次的state', pre);
-		// 		return { number: '10' };
-		// 	},
-		// 	() => {
-		// 		console.log('done2');
-		// 	}
-		// );
+	};
+
+	handleClickParent = () => {
+		console.log('parent-parent触发');
+	};
+
+	handleParent = () => {
+		console.log('parent触发', this.state.number);
+		this.setState({ number: this.state.number + 1 });
+		console.log(this.state.number, 'parent 中的state');
 	};
 
 	render() {
 		// console.log(this.state.number, 'render');
-		return <div onClick={this.handleClick}>{this.state.number}</div>;
+		return (
+			<div onClick={this.handleClickParent}>
+				<div onClick={this.handleParent}>
+					父亲元素
+					<div onClick={this.handleClick}>{this.state.number}</div>
+				</div>
+			</div>
+		);
 	}
 }
 

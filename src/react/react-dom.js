@@ -8,7 +8,7 @@ function render(vDom, el) {
 
 // 将vDom转化成为真实Dom
 function createDom(vDom) {
-	const { type, props } = vDom;
+	const { type, props, ref } = vDom;
 	let dom;
 	if (type == REACT_TEXT) {
 		dom = document.createTextNode(props.content);
@@ -36,6 +36,10 @@ function createDom(vDom) {
 	}
 	// 虚拟DOM上的dom属性指向真实dom 这里只有renderVDom才会挂载dom
 	vDom.dom = dom;
+	// 赋值Ref 属性上存在ref，那么在每次创建完成真实DOM后,将对应真实Dom元素赋值给ref.current
+	if (ref) {
+		ref.current = dom;
+	}
 	return dom;
 }
 
@@ -48,6 +52,7 @@ function reconcileChildren(vDoms, el) {
 
 // 挂载ClassComponent
 function mountClassComponent(vDom) {
+	// 这里应该可以拿到ref 类组件的ref是类的实例对象
 	const { type, props } = vDom;
 	const instance = new type(props);
 	const renderVDom = instance.render();

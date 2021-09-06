@@ -1,9 +1,16 @@
 import { wrapTextNode } from '../utils/index';
 import Component from './component';
+import { createRef } from './ref';
 
 const React = {
 	// 通过createElement将jsx转化成为vdom
 	createElement(type, config, children) {
+		let ref; // 额外定义Ref属性
+		if (config) {
+			// 他们并不属于props
+			ref = config.ref;
+			delete config.ref;
+		}
 		const props = {
 			...config,
 		};
@@ -17,8 +24,10 @@ const React = {
 		return {
 			type,
 			props,
+			ref,
 		};
 	},
+	createRef,
 	// 类组件
 	Component,
 };

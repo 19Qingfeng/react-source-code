@@ -87,33 +87,66 @@ console.log(element, 'element');
 // }
 
 // 普通DOM元素的ref
+// class ClassComponent extends React.Component {
+// 	constructor() {
+// 		super();
+// 		this.refInputPrefix = React.createRef();
+// 		this.refInputSuffix = React.createRef();
+// 		this.ref = React.createRef();
+// 	}
+
+// 	handleClick = () => {
+// 		const prefix = this.refInputPrefix.current.value;
+// 		const suffix = this.refInputSuffix.current.value;
+// 		const result = parseInt(prefix) + parseInt(suffix);
+// 		this.ref.current.value = result;
+// 	};
+
+// 	render() {
+// 		return (
+// 			<div>
+// 				<input ref={this.refInputPrefix}></input>
+// 				<input ref={this.refInputSuffix}></input>
+// 				<button onClick={this.handleClick}>点击计算结果</button>
+// 				<input ref={this.ref}></input>
+// 			</div>
+// 		);
+// 	}
+// }
+
+// 类组件的ref实现
+class ChildrenComponent extends React.Component {
+	constructor() {
+		super();
+		this.inputRef = React.createRef();
+	}
+	handleFocus = () => {
+		this.inputRef.current.focus();
+	};
+	render() {
+		return <input ref={this.inputRef}>children</input>;
+	}
+}
+
 class ClassComponent extends React.Component {
 	constructor() {
 		super();
-		this.refInputPrefix = React.createRef();
-		this.refInputSuffix = React.createRef();
-		this.ref = React.createRef();
+		this.childrenCmp = React.createRef();
 	}
 
 	handleClick = () => {
-		const prefix = this.refInputPrefix.current.value;
-		const suffix = this.refInputSuffix.current.value;
-		const result = parseInt(prefix) + parseInt(suffix);
-		this.ref.current.value = result;
+		this.childrenCmp.current.handleFocus();
 	};
 
 	render() {
 		return (
 			<div>
-				<input ref={this.refInputPrefix}></input>
-				<input ref={this.refInputSuffix}></input>
-				<button onClick={this.handleClick}>点击计算结果</button>
-				<input ref={this.ref}></input>
+				<ChildrenComponent ref={this.childrenCmp}></ChildrenComponent>
+				<button onClick={this.handleClick}>聚焦儿子节点input</button>
 			</div>
 		);
 	}
 }
-
 const element = <ClassComponent></ClassComponent>;
 
 ReactDOM.render(element, document.getElementById('root'));

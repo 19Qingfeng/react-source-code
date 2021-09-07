@@ -53,8 +53,12 @@ function reconcileChildren(vDoms, el) {
 // 挂载ClassComponent
 function mountClassComponent(vDom) {
 	// 这里应该可以拿到ref 类组件的ref是类的实例对象
-	const { type, props } = vDom;
+	const { type, props, ref } = vDom;
 	const instance = new type(props);
+	if (ref) {
+		// 如果ref属性存在 类的实例赋值给ref.current
+		ref.current = instance;
+	}
 	const renderVDom = instance.render();
 	// 考虑根节点是class组件 所以 vDom.oldRenderVDom = renderVDom
 	instance.oldRenderVDom = vDom.oldRenderVDom = renderVDom; // 挂载时候给类实例对象上挂载当前RenderVDom

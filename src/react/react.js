@@ -9,7 +9,6 @@ const React = {
 		if (config) {
 			// 他们并不属于props
 			ref = config.ref;
-			delete config.ref;
 		}
 		const props = {
 			...config,
@@ -25,6 +24,14 @@ const React = {
 			type,
 			props,
 			ref,
+		};
+	},
+	// FunctionComponent的ref转发
+	forwardRef(functionComponent) {
+		return class extends Component {
+			render() {
+				return functionComponent(this.props, this.props.ref);
+			}
 		};
 	},
 	createRef,

@@ -1,6 +1,5 @@
 import React from './react/react';
 import ReactDOM from './react/react-dom';
-
 /* 
 普通div渲染
 const element = (
@@ -115,38 +114,66 @@ console.log(element, 'element');
 // }
 
 // 类组件的ref实现
-class ChildrenComponent extends React.Component {
-	constructor() {
-		super();
-		this.inputRef = React.createRef();
-	}
-	handleFocus = () => {
-		this.inputRef.current.focus();
-	};
-	render() {
-		return <input ref={this.inputRef}>children</input>;
-	}
-}
+// class ChildrenComponent extends React.Component {
+// 	constructor() {
+// 		super();
+// 		this.inputRef = React.createRef();
+// 	}
+// 	handleFocus = () => {
+// 		this.inputRef.current.focus();
+// 	};
+// 	render() {
+// 		return <input ref={this.inputRef}>children</input>;
+// 	}
+// }
 
-class ClassComponent extends React.Component {
-	constructor() {
-		super();
-		this.childrenCmp = React.createRef();
+// class ClassComponent extends React.Component {
+// 	constructor() {
+// 		super();
+// 		this.childrenCmp = React.createRef();
+// 	}
+
+// 	handleClick = () => {
+// 		this.childrenCmp.current.handleFocus();
+// 	};
+
+// 	render() {
+// 		return (
+// 			<div>
+// 				<ChildrenComponent ref={this.childrenCmp}></ChildrenComponent>
+// 				<button onClick={this.handleClick}>聚焦儿子节点input</button>
+// 			</div>
+// 		);
+// 	}
+// }
+
+// 函数组件的Ref
+const Child = React.forwardRef(function (props, ref) {
+	return <input ref={ref}>{props.name}</input>;
+});
+
+class Parent extends React.Component {
+	constructor(props) {
+		super(props);
+		this.ref = React.createRef();
 	}
 
 	handleClick = () => {
-		this.childrenCmp.current.handleFocus();
+		this.ref.current.focus();
 	};
 
 	render() {
 		return (
 			<div>
-				<ChildrenComponent ref={this.childrenCmp}></ChildrenComponent>
-				<button onClick={this.handleClick}>聚焦儿子节点input</button>
+				{/* 类组件 上 存在 ref 和 name */}
+				<Child ref={this.ref} name="wang.haoyu">
+					类组件
+				</Child>
+				<button onClick={this.handleClick}>点击聚焦</button>
 			</div>
 		);
 	}
 }
-const element = <ClassComponent></ClassComponent>;
+const element = <Parent></Parent>;
 
 ReactDOM.render(element, document.getElementById('root'));

@@ -148,9 +148,13 @@ console.log(element, 'element');
 // }
 
 // 函数组件的Ref
-const Child = React.forwardRef(function (props, ref) {
+// const Child = React.forwardRef(function (props, ref) {
+// 	return <input ref={ref}>{props.name}</input>;
+// });
+
+const Child = function (props, ref) {
 	return <input ref={ref}>{props.name}</input>;
-});
+};
 
 class Parent extends React.Component {
 	constructor(props) {
@@ -162,7 +166,16 @@ class Parent extends React.Component {
 		this.ref.current.focus();
 	};
 
+	componentWillMount() {
+		console.log('componentWillMount')
+	}
+
+	componentDidMount() {
+		console.log('componentDidMount')
+	}
+
 	render() {
+		console.log('render')
 		return (
 			<div>
 				{/* 类组件 上 存在 ref 和 name */}

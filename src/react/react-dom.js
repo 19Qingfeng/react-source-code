@@ -55,11 +55,17 @@ function mountClassComponent(vDom) {
 	// 这里应该可以拿到ref 类组件的ref是类的实例对象
 	const { type, props, ref } = vDom;
 	const instance = new type(props);
+	if (instance.componentWillMount) {
+		instance.componentWillMount()
+	}
 	if (ref) {
 		// 如果ref属性存在 类的实例赋值给ref.current
 		ref.current = instance;
 	}
 	const renderVDom = instance.render();
+	if (instance.componentDidMount) {
+		instance.componentDidMount()
+	}
 	// 考虑根节点是class组件 所以 vDom.oldRenderVDom = renderVDom
 	instance.oldRenderVDom = vDom.oldRenderVDom = renderVDom; // 挂载时候给类实例对象上挂载当前RenderVDom
 	return createDom(renderVDom);
@@ -67,8 +73,9 @@ function mountClassComponent(vDom) {
 
 // 挂载FunctionComponent
 function mountFunctionComponent(vDom) {
-	const { type, props } = vDom;
-	const renderDom = type(props);
+	const { type, props, ref } = vDom;
+	// 这里存在
+	const renderDom = type(props, ref);
 	// 考虑根节点是FunctionComponent
 	vDom.oldRenderVDom = renderDom;
 	const dom = createDom(renderDom);

@@ -134,12 +134,14 @@ class Component {
 		// 更新实例上vDom属性为最新的 注意这里是renderVDom
 		this.oldRenderVDom = newRenderVDom;
 	}
+	/* 生命周期相关 */
+
 }
 
 /* 
-  区分FC和Class Component的区别
-  源码中ClassComponent prototype中存在isReactComponent
-  class组件子元素可以通过此属性鉴别是否是ClassComponent
+	区分FC和Class Component的区别
+	源码中ClassComponent prototype中存在isReactComponent
+	class组件子元素可以通过此属性鉴别是否是ClassComponent
 */
 
 Component.prototype.isReactComponent = {};

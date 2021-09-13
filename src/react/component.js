@@ -43,23 +43,23 @@ class Updater {
 	}
 
 	// props/state变化触发更新
-	emitUpdate() {
+	emitUpdate(nextProps) {
 		if (updateQueue.isBatchUpdating) {
 			// 批量更新
 			updateQueue.updaters.add(this);
 		} else {
 			// 非批量更新
-			this.updateComponent();
+			this.updateComponent(nextProps);
 		}
 	}
 
 	// 让组件更新
-	updateComponent() {
+	updateComponent(nextProps) {
 		const { classInstance, pendingState } = this;
 		// 存在等待更新
 		if (pendingState.length > 0) {
 			// 让组件进行更新
-			shouldUpdate(classInstance, this.getState());
+			shouldUpdate(classInstance, nextProps, this.getState());
 		}
 	}
 
@@ -86,10 +86,23 @@ class Updater {
 }
 
 // 决定instance是否更新
-function shouldUpdate(instance, state) {
-	instance.state = state; // 内部真正修改实例的state
-	// 调用实例的方法进行重新渲染
-	instance.forceUpdate();
+function shouldUpdate(instance, nextProps, nextState) {
+	let willUpdate = true
+	if (instance.shouldComponentUpdate && !instance.shouldComponentUpdate(nextProps, nextState)) {
+		willUpdate = false
+	}
+
+	// 更新前的生命周期
+	if (willUpdate && instance.componentWillUpdate) {
+		instance.componentWillUpdate()
+	}
+
+	// 内部真正修改实例的state 无论是否更新都会修改组件的state/props
+	if (nextProps) instance.props = nextProps
+	instance.state = nextState;
+	if (willUpdate) {
+		instance.forceUpdate();
+	}
 }
 
 class Component {
@@ -133,9 +146,11 @@ class Component {
 		compareToVDom(parentDom, oldRenderVDom, newRenderVDom);
 		// 更新实例上vDom属性为最新的 注意这里是renderVDom
 		this.oldRenderVDom = newRenderVDom;
+		/* 生命周期 更新完成 */
+		if (this.componentDidUpdate) {
+			this.componentDidUpdate(this.props, this.state)
+		}
 	}
-	/* 生命周期相关 */
-
 }
 
 /* 

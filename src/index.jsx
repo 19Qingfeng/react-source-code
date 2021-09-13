@@ -152,19 +152,61 @@ console.log(element, 'element');
 // 	return <input ref={ref}>{props.name}</input>;
 // });
 
-const Child = function (props, ref) {
-	return <input ref={ref}>{props.name}</input>;
-};
+// const Child = function (props, ref) {
+// 	return <input ref={ref}>{props.name}</input>;
+// };
 
-class Parent extends React.Component {
+// class Parent extends React.Component {
+// 	constructor(props) {
+// 		super(props);
+// 		this.ref = React.createRef();
+// 	}
+
+// 	handleClick = () => {
+// 		this.ref.current.focus();
+// 	};
+
+// 	componentWillMount() {
+// 		console.log('componentWillMount')
+// 	}
+
+// 	componentDidMount() {
+// 		console.log('componentDidMount')
+// 	}
+
+// 	render() {
+// 		console.log('render')
+// 		return (
+// 			<div>
+// 				{/* 类组件 上 存在 ref 和 name */}
+// 				<Child ref={this.ref} name="wang.haoyu">
+// 					类组件
+// 				</Child>
+// 				<button onClick={this.handleClick}>点击聚焦</button>
+// 			</div>
+// 		);
+// 	}
+// }
+
+
+// 基础生命周期
+class Counter extends React.Component {
+	static defaultProps = {
+		name: 'wang.haoyu'
+	}
 	constructor(props) {
-		super(props);
-		this.ref = React.createRef();
+		super(props)
+		this.state = {
+			number: 1
+		}
+		console.log(props, 'constructor')
 	}
 
 	handleClick = () => {
-		this.ref.current.focus();
-	};
+		this.setState({
+			number: this.state.number + 2
+		})
+	}
 
 	componentWillMount() {
 		console.log('componentWillMount')
@@ -174,19 +216,27 @@ class Parent extends React.Component {
 		console.log('componentDidMount')
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		console.log('是否更新shouldComponentUpdate', nextProps, nextState)
+		return true
+	}
+
+	componentWillUpdate() {
+		console.log('componentWillUpdate')
+	}
+
+	componentDidUpdate() {
+		console.log('componentDidUpdate')
+	}
+
 	render() {
 		console.log('render')
-		return (
-			<div>
-				{/* 类组件 上 存在 ref 和 name */}
-				<Child ref={this.ref} name="wang.haoyu">
-					类组件
-				</Child>
-				<button onClick={this.handleClick}>点击聚焦</button>
-			</div>
-		);
+		return <div>
+			<p>{this.state.number}</p>
+			<button onClick={this.handleClick}>+++++</button>
+		</div>
 	}
 }
-const element = <Parent></Parent>;
+const element = <Counter></Counter>;
 
 ReactDOM.render(element, document.getElementById('root'));

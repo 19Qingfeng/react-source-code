@@ -54,7 +54,9 @@ function reconcileChildren(vDoms, el) {
 function mountClassComponent(vDom) {
 	// 这里应该可以拿到ref 类组件的ref是类的实例对象
 	const { type, props, ref } = vDom;
-	const instance = new type(props);
+	const defaultProps = type.defaultProps || {}
+	const componentProps = { ...defaultProps, ...props }
+	const instance = new type(componentProps);
 	if (instance.componentWillMount) {
 		instance.componentWillMount()
 	}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>requestIdleCallback</title>
+</head>
+
+<body>
+  <script>
+    function sleep(duration) {
+      const start = Date.now()
+      while (Date.now() - start <= duration) {
+        // 直接卡死
+      }
+    }
+
+    const works = [
+      () => {
+        console.log('第一个任务开始')
+        sleep(20)
+        console.log('第一个任务结束')
+      },
+      () => {
+        console.log('第2个任务开始')
+        sleep(20)
+        console.log('第2个任务结束')
+      },
+      () => {
+        console.log('第3个任务开始')
+        sleep(20)
+        console.log('第3个任务结束')
+      }
+    ]
+
+    requestIdleCallback(workLoop)
+
+    function workLoop(deadline) {
+      console.log(`本次渲染剩余时间: ${deadline.timeRemaining()}`)
+
+      while (deadline.timeRemaining() > 0 && works.length > 0) {
+        performUnitOfWork()
+      }
+
+      if (works.length > 0) {
+        console.log(`存在剩余任务，但是没有空闲时间了---${deadline.timeRemaining()}`)
+        requestIdleCallback(workLoop)
+      }
+
+    }
+
+    function performUnitOfWork() {
+      const work = works.shift()
+      work()
+    }
+
+  </script>
+</body>
+
+</html>

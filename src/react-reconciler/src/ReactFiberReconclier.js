@@ -15,4 +15,5 @@ export function updateContainer(element, container) {
   const update = createUpdate();
   update.payload = { element };
   enqueueUpdate(current, update);
+  return markUpdateLaneFromFiberToRoot(fiber);
 }

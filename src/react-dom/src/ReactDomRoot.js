@@ -12,6 +12,9 @@ ReactDomRoot.prototype.render = function (children) {
   updateContainer(children, root);
 };
 
+/**
+ * container Dom 元素
+ */
 export function createRoot(container) {
   const root = createContainer(container);
   return new ReactDomRoot(root);

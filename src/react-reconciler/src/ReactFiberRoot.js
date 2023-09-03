@@ -1,6 +1,10 @@
 import { createHostRootFiber } from "./ReactFiber";
 import { initialUpdateQueue } from "./ReactFiberClassUpdateQueue";
 
+/**
+ * 类似于真实 Dom 节点（进行了简单的包装）
+ * @param {*} containerInfo
+ */
 function FiberRootNode(containerInfo) {
   this.containerInfo = containerInfo;
 }
@@ -11,7 +15,7 @@ function FiberRootNode(containerInfo) {
  * @returns
  */
 export function createFiberRoot(containerInfo) {
-  const root = new FiberRootNode(containerInfo);
+  const root = new FiberRootNode(containerInfo); // root 的本质和 fiber 没关系，它内部通过 containerInfo 指向真实 Dom 节点
   // 创建根 fiber
   const uninitializedFiber = createHostRootFiber();
   // 将根容器的 current 指向根 fiber

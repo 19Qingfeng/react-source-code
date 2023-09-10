@@ -16,7 +16,7 @@ function FiberRootNode(containerInfo) {
  */
 export function createFiberRoot(containerInfo) {
   const root = new FiberRootNode(containerInfo); // root 的本质和 fiber 没关系，它内部通过 containerInfo 指向真实 Dom 节点
-  // 创建根 fiber
+  // 创建根 fiber 这里是是真实 Fiber
   const uninitializedFiber = createHostRootFiber();
   // 将根容器的 current 指向根 fiber
   root.current = uninitializedFiber;

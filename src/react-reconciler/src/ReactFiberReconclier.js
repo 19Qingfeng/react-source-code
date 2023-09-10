@@ -1,5 +1,6 @@
 import { createFiberRoot } from "./ReactFiberRoot";
 import { createUpdate, enqueueUpdate } from "./ReactFiberClassUpdateQueue";
+import { scheduleUpdateOnFiber } from "./ReactFiberWorkLoop";
 
 /**
  * 创建容器
@@ -13,12 +14,14 @@ export function createContainer(containerInfo) {
 /**
  *
  * @param {*} element 虚拟 Dom
- * @param {*} container 真实 Dom 容器
+ * @param {*} container 真实 Dom 容器(fiberRootNode)
  */
 export function updateContainer(element, container) {
   const current = container.current; // fiberNode
-  const update = createUpdate();
+  const update = createUpdate(); // 创建更新
   update.payload = { element };
-  enqueueUpdate(current, update);
-  return markUpdateLaneFromFiberToRoot(fiber);
+  const root = enqueueUpdate(current, update); // 将更新入队
+  // 开启更新
+  scheduleUpdateOnFiber(root);
+  // return root;
 }

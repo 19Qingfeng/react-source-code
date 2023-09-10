@@ -5,7 +5,8 @@ const element = <h1>Hello
 </h1>
 
 const root = createRoot(document.getElementById('root'))
-console.log(root,'root')
+
+root.render(element)
 
 // .render(element)
 

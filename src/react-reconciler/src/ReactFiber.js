@@ -45,3 +45,33 @@ export function createFiber(tag, pendingProps, key) {
 export function createHostRootFiber() {
   return createFiber(HostRoot, null, null);
 }
+
+/**
+ * 根据老的 fiber 节点和新的属性创建新的 fiber 节点
+ */
+export function createWorkInProgress(current, pendingProps) {
+  let workInProgress = current.alternate; // 旧fiber的轮替
+  if (workInProgress === null) {
+    // 第一次渲染时，轮替为 null 创建新的 fiber
+    workInProgress = createFiber(current.tag, pendingProps, current.key);
+    // 复用属性
+    workInProgress.type = current.type;
+    workInProgress.stateNode = current.stateNode;
+    // 双向指针
+    workInProgress.alternate = current;
+    current.alternate = workInProgress;
+  } else {
+    // 复用老的 fiber
+    workInProgress.pendingProps = pendingProps;
+    workInProgress.type = current.type;
+    workInProgress.flags = NoFlags;
+    workInProgress.subTreeFlags = NoFlags;
+  }
+  workInProgress.child = current.child;
+  workInProgress.memoizedProps = current.memoizedProps;
+  workInProgress.memoizedState = current.memoizedState;
+  workInProgress.updateQueue = current.updateQueue;
+  workInProgress.sibling = current.sibling;
+  workInProgress.index = current.index;
+  return workInProgress;
+}
